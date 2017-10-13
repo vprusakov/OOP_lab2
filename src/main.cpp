@@ -3,21 +3,23 @@
 using namespace std;
 
 int main() {
-	StatisticMultiset a;
-	/*
-	a.AddNum(4);
-	a.AddNum(1);
-	a.AddNum(3);
-	a.AddNum(2);
-	std::cout << a.GetMax() << " " << a.GetMin() << std::endl;
-	std::cout << a.GetAvg() << std::endl;
-	cout << a.GetCountAbove(1.5) << endl;
-	cout << a.GetCountUnder(3.5) << endl;
-	*/
-	vector<int> v = { 5, 6, 0, -1 };
-	a.AddNum(v);
-	//a.AddNumsFromFile("../input_files/file.txt");
-	a.Print();
+	
+	cout << "Lab 02" << endl;
+	StatisticMultiset<int> ms1;
+	ms1.AddNum(89);
+	ms1.AddNum(54);
+	ms1.AddNum(54);
+	ms1.AddNum(24);
 
+	StatisticMultiset<int> ms2;
+	std::vector<int> somedata = { 10, 40, 6, 87 };
+	ms2.AddNum(somedata);
+	StatisticMultiset<int> ms3;
+	ms3.AddNums(ms1);
+	ms3.AddNums(ms2);
+	cout << " Min: " << ms3.GetMin()
+		<< " Avg: " << ms3.GetAvg()
+		<< " Max: " << ms3.GetMax()
+		<< endl;
 	return 0;
 }

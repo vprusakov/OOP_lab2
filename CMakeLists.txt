@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(OOP_lab1)
+project(OOP_lab2)
 
 set(SOURCE_FILES
 	src/main.cpp
@@ -8,4 +8,4 @@ set(SOURCE_FILES
 	)
 
 
-add_executable(OOP_lab1 ${SOURCE_FILES})
+add_executable(OOP_lab2 ${SOURCE_FILES})
