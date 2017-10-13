@@ -13,7 +13,7 @@ public:
 	}
 	T GetMin() const {
 		return min;
-	}û
+	}
 	float GetAvg() const {
 		if (avgIsChanged) {
 			float sum = 0;
