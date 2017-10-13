@@ -8,15 +8,12 @@
 template<typename T>
 class StatisticMultiset {
 public:
-	// Максимальное число в наборе.
 	T GetMax() const {
 		return max;
 	}
-	// Минимальное число в наборе.
 	T GetMin() const {
 		return min;
-	}
-	// Среднее арифметическое всего набора.
+	}ы
 	float GetAvg() const {
 		if (avgIsChanged) {
 			float sum = 0;
@@ -26,7 +23,6 @@ public:
 		}
 		return recentAvg;
 	}
-	// Кол-во чисел в наборе меньше заданного порога.
 	int GetCountUnder(float threshold) const {
 		for (auto &it : underCache) {
 			if (threshold == it.first) return it.second;
@@ -38,7 +34,6 @@ public:
 		underCache.push_back(std::make_pair(threshold, c));
 		return c;
 	}
-	// Кол-во чисел в наборе больше заданного порога.
 	int GetCountAbove(float threshold) const {
 		for (auto &it : aboveCache) {
 			if (threshold == it.first) return it.second;
@@ -50,7 +45,6 @@ public:
 		aboveCache.push_back(std::make_pair(threshold, c));
 		return c;
 	}
-	// Добавление данных
 	void AddNum(T num) {
 		if (data.empty()) {
 			min = num;
@@ -97,7 +91,6 @@ private:
 	mutable float recentAvg;
 	mutable bool avgIsChanged;
 	mutable std::vector< std::pair<float, unsigned int> > aboveCache, underCache;
-	//Обновление кеша
 	void UpdateCache(const T &value) const {
 		for (auto &it : aboveCache) {
 			if (value > it.first) { it.second++; }
