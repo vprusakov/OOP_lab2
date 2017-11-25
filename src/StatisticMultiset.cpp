@@ -128,7 +128,7 @@ void StatisticMultiset<T>::UpdateCache(const T &value) const {
 }
 
 template<class T>
-StatisticMultiset::~StatisticMultiset() {
+StatisticMultiset<T>::~StatisticMultiset() {
 	data.clear();
 	aboveCache.clear();
 	underCache.clear();
