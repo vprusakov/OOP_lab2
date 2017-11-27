@@ -1,135 +1,143 @@
 #include "StatisticMultiset.h"
 
-template<class T>
-StatisticMultiset<T>::StatisticMultiset(const T num) {
-	AddNum(num);
-};
-template<class T>
-StatisticMultiset<T>::StatisticMultiset(const std::multiset<T> &numbers) {
-	AddNums(numbers);
-};
-template<class T>
-StatisticMultiset<T>::StatisticMultiset(const std::vector<T> &numbers) {
-	AddNums(numbers);
-};
-template<class T>
-StatisticMultiset<T>::StatisticMultiset(const std::list<T> &numbers) {
-	AddNums(numbers);
-};
-template<class T>
-StatisticMultiset<T>::StatisticMultiset(const StatisticMultiset& a_stat_set) {
-	AddNums(a_stat_set);
-};
-template<class T>
-StatisticMultiset<T>::StatisticMultiset(const char* filename) {
-	AddNums(filename);
-};
+template class StatisticMultiset<int>;
+template class StatisticMultiset<float>;
+template class StatisticMultiset<double>;
 
-template<class T>
+template <typename T>
 T StatisticMultiset<T>::GetMax() const {
-	return max;
+	if (!data.size()) throw "Nothing is in StatisticMultiset.\n";
+	return *data.rbegin();
 }
-template<class T>
+template <typename T>
 T StatisticMultiset<T>::GetMin() const {
-	return min;
+	if (!data.size()) throw "Nothing is in StatisticMultiset.\n";
+	return *data.begin();
 }
-template<class T>
+template <typename T>
 float StatisticMultiset<T>::GetAvg() const {
-	if (avgIsChanged) {
+	if (!data.size()) throw "Nothing is in StatisticMultiset.\n";
+	if (avg_changed) {
 		float sum = 0;
 		for (auto &val : data) { sum += val; }
-		recentAvg = sum / data.size();
-		avgIsChanged = 0;
+		avg_cache = sum / data.size();
 	}
-	return recentAvg;
+	return avg_cache;
 }
-template<class T>
-int StatisticMultiset<T>::GetCountUnder(float threshold) const {
-	for (auto &it : underCache) {
+template <typename T>
+unsigned int StatisticMultiset<T>::GetCountAbove(const float &threshold) const {
+	if (!data.size()) throw "Nothing is in StatisticMultiset.\n";
+	if (above_threshold_changed) {
+		for (auto &th : above_cache) {
+			th.second = 0;
+			for (auto &val : data) {
+				if (val > th.first) { ++th.second; }
+			}
+		}
+	}
+	
+	for (auto &it : above_cache) {
+		std::cout << "bark" << std::endl;
 		if (threshold == it.first) return it.second;
 	}
-	unsigned int c = 0;
+
+	std::pair<float, unsigned int> p(threshold, 0);
+
 	for (auto &val : data) {
-		if (val < threshold) { c++; }
+		if (val > threshold) {
+			++p.second;
+		};
 	}
-	underCache.push_back(std::make_pair(threshold, c));
-	return c;
+	if (above_cache.size() == cache_size) {
+		above_cache.pop_back();
+	}
+	above_cache.push_front(p);
+	return p.second;
 }
-template<class T>
-int StatisticMultiset<T>::GetCountAbove(float threshold) const {
-	for (auto &it : aboveCache) {
+template <typename T>
+unsigned int StatisticMultiset<T>::GetCountUnder(const float &threshold) const {
+	if (!data.size()) throw "Nothing is in StatisticMultiset.\n";
+	if (under_threshold_changed) {
+		for (auto &th : under_cache) {
+			th.second = 0;
+			for (auto &val : data) {
+				if (val < th.first) { ++th.second; }
+			}
+		}
+	}
+	for (auto &it : under_cache) {
 		if (threshold == it.first) return it.second;
 	}
-	unsigned int c = 0;
+
+	std::pair<float, unsigned int> p(threshold, 0);
+
 	for (auto &val : data) {
-		if (val > threshold) { c++; }
+		if (val < threshold) {
+			++p.second;
+		};
 	}
-	aboveCache.push_back(std::make_pair(threshold, c));
-	return c;
+	if (under_cache.size() == cache_size) {
+		under_cache.pop_back();
+	}
+	under_cache.push_front(p);
+	return p.second;
 }
 
-template<class T>
-void StatisticMultiset<T>::AddNum(const T num) {
-	if (data.empty()) {
-		min = num;
-		max = num;
-	}
-	else {
-		if (num > max) { max = num; }
-		else if (num < min) { min = num; }
-	}
+
+template <typename T>
+void StatisticMultiset<T>::AddNum(const T &num) {
 	data.insert(num);
-	avgIsChanged = 1;
+	avg_changed = 1;
+	above_threshold_changed = 1;
+	under_threshold_changed = 1;
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const std::multiset<T> &numbers) {
 	for (auto &val : numbers) {
-		AddNum(val);
+		data.insert(val);
 	}
-	avgIsChanged = 1;
+	avg_changed = 1;
+	above_threshold_changed = 1;
+	under_threshold_changed = 1;
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const std::vector<T> &numbers) {
 	for (auto &val : numbers) {
-		AddNum(val);
+		data.insert(val);
 	}
-	avgIsChanged = 1;
+	avg_changed = 1;
+	above_threshold_changed = 1;
+	under_threshold_changed = 1;
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const std::list<T> &numbers) {
 	for (auto &val : numbers) {
-		AddNum(val);
+		data.insert(val);
 	}
-	avgIsChanged = 1;
-}
-template<class T>
-void StatisticMultiset<T>::AddNumsFromFile(const char* filename) {
-	std::ifstream file(filename);
-	int x;
-	if (!file.fail()) {
-		while (file >> x) { AddNum(x); }
-		avgIsChanged = 1;
-	}
+	avg_changed = 1;
+	above_threshold_changed = 1;
+	under_threshold_changed = 1;
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const StatisticMultiset& a_stat_set) {
-	AddNums(a_stat_set.data);
-	avgIsChanged = 1;
-}
-
-template<class T>
-void StatisticMultiset<T>::UpdateCache(const T &value) const {
-	for (auto &it : aboveCache) {
-		if (value > it.first) { it.second++; }
+	for (auto &val : a_stat_set.data) {
+		this->data.insert(val);
 	}
-	for (auto &it : underCache) {
-		if (value < it.first) { it.second++; }
-	}
+	avg_changed = 1;
+	above_threshold_changed = 1;
+	under_threshold_changed = 1;
 }
-
 template<class T>
-StatisticMultiset<T>::~StatisticMultiset() {
-	data.clear();
-	aboveCache.clear();
-	underCache.clear();
+void StatisticMultiset<T>::AddNumsFromFile(const std::string &filename) {
+	std::ifstream file(filename);
+	int x;
+	if (!file.fail()) {
+		while (file >> x) {
+			data.insert(x);
+		}
+		avg_changed = 1;
+		above_threshold_changed = 1;
+		under_threshold_changed = 1;
+	}
+	else throw "Can't open the file.\n";
 }

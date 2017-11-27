@@ -4,36 +4,35 @@
 #include <list>
 #include <iostream>
 #include <fstream>
+#include <deque>
+#include <string>
 
-template<class T>
+template <typename T>
 class StatisticMultiset {
 public:
     StatisticMultiset() = default;
-    explicit StatisticMultiset(T num);
-    explicit StatisticMultiset(const std::multiset<T>&);
-    explicit StatisticMultiset(const std::vector<T>&);
-    explicit StatisticMultiset(const std::list<T>&);
-    explicit StatisticMultiset(const StatisticMultiset&);
-    explicit StatisticMultiset(const char*);
-    ~StatisticMultiset();
-
+    ~StatisticMultiset() = default;
+	
 	T GetMax() const;
 	T GetMin() const;
 	float GetAvg() const;
-	int GetCountUnder(float) const;
-	int GetCountAbove(float) const;
+	unsigned int GetCountAbove(const float &) const;
+	unsigned int GetCountUnder(const float &) const;
 
-	void AddNum(T num);
+
+	void AddNum(const T &num);
 	void AddNums(const std::multiset<T>&);
 	void AddNums(const std::vector<T>&);
 	void AddNums(const std::list<T>&);
-	void AddNumsFromFile(const char*);
 	void AddNums(const StatisticMultiset&);
+	void AddNumsFromFile(const std::string &filename);
+
 private:
 	std::multiset<T> data;
-	T max, min;
-	mutable float recentAvg;
-	mutable bool avgIsChanged;
-	mutable std::vector< std::pair<float, unsigned int> > aboveCache, underCache;
-	void UpdateCache(const T&) const;
+	mutable bool avg_changed;
+	mutable float avg_cache;
+
+	mutable short cache_size = 3;
+	mutable std::deque< std::pair<float, unsigned int> > above_cache, under_cache;
+	mutable bool above_threshold_changed, under_threshold_changed;
 };
