@@ -37,7 +37,6 @@ unsigned int StatisticMultiset<T>::GetCountAbove(const float &threshold) const {
 	}
 	
 	for (auto &it : above_cache) {
-		std::cout << "bark" << std::endl;
 		if (threshold == it.first) return it.second;
 	}
 
