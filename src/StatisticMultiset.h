@@ -19,7 +19,6 @@ public:
 	unsigned int GetCountAbove(const float &) const;
 	unsigned int GetCountUnder(const float &) const;
 
-
 	void AddNum(const T &num);
 	void AddNums(const std::multiset<T>&);
 	void AddNums(const std::vector<T>&);
@@ -31,7 +30,6 @@ private:
 	std::multiset<T> data;
 	mutable bool avg_changed;
 	mutable float avg_cache;
-
 	mutable short cache_size = 3;
 	mutable std::deque< std::pair<float, unsigned int> > above_cache, under_cache;
 	mutable bool above_threshold_changed, under_threshold_changed;

@@ -81,8 +81,6 @@ unsigned int StatisticMultiset<T>::GetCountUnder(const float &threshold) const {
 	under_cache.push_front(p);
 	return p.second;
 }
-
-
 template <typename T>
 void StatisticMultiset<T>::AddNum(const T &num) {
 	data.insert(num);
@@ -92,6 +90,7 @@ void StatisticMultiset<T>::AddNum(const T &num) {
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const std::multiset<T> &numbers) {
+	if (!numbers.size()) throw "Nothing is in multiset.\n";
 	for (auto &val : numbers) {
 		data.insert(val);
 	}
@@ -101,6 +100,7 @@ void StatisticMultiset<T>::AddNums(const std::multiset<T> &numbers) {
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const std::vector<T> &numbers) {
+	if (!numbers.size()) throw "Nothing is in vector.\n";
 	for (auto &val : numbers) {
 		data.insert(val);
 	}
@@ -110,6 +110,7 @@ void StatisticMultiset<T>::AddNums(const std::vector<T> &numbers) {
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const std::list<T> &numbers) {
+	if (!numbers.size()) throw "Nothing is in list.\n";
 	for (auto &val : numbers) {
 		data.insert(val);
 	}
@@ -119,6 +120,7 @@ void StatisticMultiset<T>::AddNums(const std::list<T> &numbers) {
 }
 template<class T>
 void StatisticMultiset<T>::AddNums(const StatisticMultiset& a_stat_set) {
+	if (!a_stat_set.data.size()) throw "Nothing is in StaticMultiset.\n";
 	for (auto &val : a_stat_set.data) {
 		this->data.insert(val);
 	}
